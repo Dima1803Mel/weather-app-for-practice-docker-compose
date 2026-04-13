@@ -2,8 +2,7 @@ name: docker-publication
 
 on:
   release:
-    types: 
-      - published  # Срабатывает только при публикации релиза
+    types: [published] # Срабатывает только при публикации релиза
 
 jobs:
     build: 
