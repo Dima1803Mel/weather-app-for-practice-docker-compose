@@ -1,16 +1,33 @@
 import requests
+from flask import Flask, jsonify, request
+import os
 
-API_KEY = "7e7b169fa1aec31eb0da2b1399d30739"
-CITY = "Vladimir"
+app = Flask(__name__)
+API_KEY = os.environ.get('OPENWEATHER_API_KEY')
 
-url = f"http://api.openweathermap.org/data/2.5/weather?q={CITY}&appid={API_KEY}&units=metric"
+@app.route('/weather', methods=['GET'])
+def get_weather():
+    city = request.args.get('city', 'Vladimir')
+    url = f"http://api.openweathermap.org/data/2.5/weather?q={city}&appid={API_KEY}&units=metric"
+    
+    try:
+        response = requests.get(url, timeout=10)
+        data = response.json()
+        
+        if response.status_code == 200:
+            return jsonify({
+                'city': data['name'],
+                'temperature': data['main']['temp'],
+                'description': data['weather'][0]['description']
+            })
+        else:
+            return jsonify({'error': data.get('message', 'City not found')}), 404
+    except Exception as e:
+        return jsonify({'error': str(e)}), 500
 
-response = requests.get(url)
+@app.route('/health', methods=['GET'])
+def health():
+    return jsonify({'status': 'ok'})
 
-if response.status_code == 200:
-    data = response.json()
-    temp = data['main']['temp']
-    desc = data['weather'][0]['description']
-    print(f"Weather in {CITY}: {temp}°C, {desc}")
-else:
-    print(f"Error {response.status_code}: {response.text}")
+if __name__ == '__main__':
+    app.run(host='0.0.0.0', port=5000)
