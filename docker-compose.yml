@@ -6,7 +6,7 @@ services:
     ports:
       - "5000:5000"
     environment:
-      - OPENWEATHER_API_KEY=${OPENWEATHER_API_KEY:-7e7b169fa1aec31eb0da2b1399d30739}
+      - OPENWEATHER_API_KEY=${OPENWEATHER_API_KEY}
     networks:
       - app-network
 
