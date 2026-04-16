@@ -1,6 +1,5 @@
 services:
   weather-app:
-    build: .
     image: weather:latest
     container_name: weather-app
     restart: always
@@ -27,7 +26,7 @@ services:
 
   # Watchtower для автоматического обновления
   watchtower:
-    image: containrrr/watchtower
+    image: containrrr/watchtower:latest
     container_name: watchtower
     restart: always
     volumes:
