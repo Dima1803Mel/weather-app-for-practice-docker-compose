@@ -1,5 +1,6 @@
 services:
   weather-app:
+    build: .
     image: weather:latest
     container_name: weather-app
     restart: always
@@ -34,7 +35,9 @@ services:
     environment:
       - WATCHTOWER_CLEANUP=true
       - WATCHTOWER_POLL_INTERVAL=60
-    command: --interval 60 weather-app
+    command: --interval 60 --cleanup
+    networks:
+      - app-network
 
 networks:
   app-network:
